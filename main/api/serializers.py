@@ -5,16 +5,27 @@ Serializers for the API
 from django.contrib.auth import get_user_model, authenticate
 from rest_framework import serializers
 from django.utils.translation import gettext_lazy as _
+from common.models import Recipe
 
 
 class UserSerializer(serializers.ModelSerializer):
     """Serializer for the user model."""
+
+    self = serializers.SerializerMethodField(
+        read_only = True
+    )
+
+    links = serializers.SerializerMethodField(
+        read_only = True
+    )
 
     class Meta:
         model = get_user_model()
         fields = (
             "username",
             "password",
+            "self",
+            "links",
         )
         extra_kwargs = {
             "password": {
@@ -22,6 +33,19 @@ class UserSerializer(serializers.ModelSerializer):
                 "min_length": 6
             }
         }
+
+    def get_links(self, obj):
+        links = []
+        for recipe in obj.recipes.all():
+            link = {
+                "rel": "recipe",
+                "href": recipe.self_url,
+            }
+            links.append(link)
+        return links
+
+    def get_self(self, obj):
+        return obj.self_url
 
     def create(self, validated_data):
         """Create and return a user with encrypted pssword
@@ -65,4 +89,44 @@ class TokenSerializer(serializers.Serializer):
             raise serializers.ValidationError(msg, code="authorization")
         attrs["user"] = user
         return attrs
+
+class RecipeSerializer(serializers.ModelSerializer):
+    """Serializers for recipes."""
+
+    self = serializers.SerializerMethodField(
+        read_only = True
+    )
+
+    class Meta:
+        model = Recipe
+        fields = [
+            "self",
+            "title",
+            "time_minutes",
+            "price",
+        ]
+        read_only_fields = ["id"]
+
+    def get_self(self, obj):
+        return obj.self_url
+
+class RecipeDetailSerializer(RecipeSerializer):
+    """Serializer for recipe detail view."""
+    links = serializers.SerializerMethodField(
+        read_only = True
+    )
+    class Meta(RecipeSerializer.Meta):
+        fields = RecipeSerializer.Meta.fields + [
+            "description",
+            "links",
+        ]
+
+    def get_links(self, obj):
+        links = [
+            {
+                "rel": "user",
+                "href": obj.user.self_url,
+            },
+        ]
+        return links
 

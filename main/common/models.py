@@ -2,7 +2,7 @@
 Databse models.
 """
 
-
+from django.conf import settings
 from django.db import models #used for fields
 from django.contrib.auth.models import (
     AbstractBaseUser,
@@ -60,6 +60,10 @@ class User(AbstractBaseUser, PermissionsMixin):
         # All admins are staff
         return self.is_admin
 
+    @property
+    def self_url(self) -> str:
+        return f"/api/users/me"
+
     def __str__(self):
         return self.username
 
@@ -72,3 +76,28 @@ class User(AbstractBaseUser, PermissionsMixin):
         "Does the user have permissions to view the app `app_label`?"
         # Simplest possible answer: Yes, always
         return True
+
+
+class Recipe(models.Model):
+    """Recipe model."""
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete = models.CASCADE,
+        related_name = "recipes",
+    )
+
+    title = models.CharField(max_length=255)
+    description = models.TextField(blank=True, null=True)
+    time_minutes = models.IntegerField()
+    price = models.DecimalField(
+        max_digits=5,
+        decimal_places=2,
+    )
+
+    @property
+    def self_url(self) -> str:
+        return f"/api/recipes/{self.id}"
+
+    def __str__(self) -> str:
+        return self.title
