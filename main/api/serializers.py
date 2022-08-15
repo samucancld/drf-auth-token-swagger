@@ -90,7 +90,6 @@ class TokenSerializer(serializers.Serializer):
         attrs["user"] = user
         return attrs
 
-
 class TagBaseSerializer(serializers.ModelSerializer):
     """Serializer for tags used to C-R-U-Detail operations."""
 
@@ -116,6 +115,16 @@ class TagBaseSerializer(serializers.ModelSerializer):
         if not Tag.objects.filter(user=user, name=value).exists():
             return value
         raise serializers.ValidationError("Ya tenes registrado un tag con ese nombre")
+
+class TagNestedCUDSerializer(TagBaseSerializer):
+    """Serializer for tags used to nested CUD operations."""
+
+    def validate_name(self, value):
+        """As this serializer is used to CUD nested operations, e.g. when creating a recipe,
+        it's not necessary to check that the user already have a tag with the name, because
+        that validations is made in the recipemodelserializer when call to his method _get_or_create_tags"""
+        return value
+
 
 
 class TagListedSerializer(TagBaseSerializer):
@@ -173,10 +182,50 @@ class RecipeModelSerializer(RecipeBaseSerializer):
     model fields except the id
     """
 
+    tags = TagNestedCUDSerializer(
+        many=True,
+        required=False,
+    )
+
     class Meta(RecipeBaseSerializer.Meta):
         fields = RecipeBaseSerializer.Meta.fields + [
             "description",
+            "tags",
         ]
+
+    def _get_or_create_tags(self, tags, recipe):
+        """Handle getting or creating tags as needed."""
+
+        auth_user = self.context["request"].user
+        for tag in tags:
+            tag_obj, created = Tag.objects.get_or_create(
+                user=auth_user,
+                **tag,  # same as name = tag['name']
+            )
+            recipe.tags.add(tag_obj)
+
+        return recipe
+
+    def create(self, validated_data):
+        """Creaste a recipe."""
+        tags = validated_data.pop("tags", [])
+        recipe = Recipe.objects.create(**validated_data)
+        self._get_or_create_tags(tags, recipe)
+
+        return recipe
+
+    def update(self, instance, validated_data):
+        """Update a recipe"""
+        tags = validated_data.pop("tags", None)
+        if tags is not None:
+            instance.tags.clear()
+            self._get_or_create_tags(tags, instance)
+
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+
+        instance.save()
+        return instance
 
     def validate_title(self, value):
         """
