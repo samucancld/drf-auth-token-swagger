@@ -92,7 +92,7 @@ class TokenSerializer(serializers.Serializer):
 
 
 class TagBaseSerializer(serializers.ModelSerializer):
-    """Serializer for tags."""
+    """Serializer for tags used to C-R-U-Detail operations."""
 
     self = serializers.SerializerMethodField(
         read_only = True
@@ -107,9 +107,11 @@ class TagBaseSerializer(serializers.ModelSerializer):
         print(fields)
 
     def get_self(self, obj):
+        """Get self_url property"""
         return obj.self_url
 
     def validate_name(self, value):
+        """Validate that doesn't exists a tag with the same name for the current user"""
         user = self.context['request'].user
         if not Tag.objects.filter(user=user, name=value).exists():
             return value
@@ -117,7 +119,7 @@ class TagBaseSerializer(serializers.ModelSerializer):
 
 
 class TagListedSerializer(TagBaseSerializer):
-    """Serializer for tag related view."""
+    """Serializer for tag list operation."""
 
     links = serializers.SerializerMethodField(
         read_only = True
@@ -129,6 +131,7 @@ class TagListedSerializer(TagBaseSerializer):
         ]
 
     def get_links(self, obj):
+        """Get all links for related recipes"""
         links = []
         for recipe in obj.recipes.all():
             links.append(
@@ -139,11 +142,15 @@ class TagListedSerializer(TagBaseSerializer):
             )
         return links
 
+# Tag Serialization Aliases:
+## Alias for retrieve operation
 TagDetailedSerializer = TagListedSerializer
+## Alias for nested serialization
 TagRelatedSerializer = TagBaseSerializer
 
 class RecipeBaseSerializer(serializers.ModelSerializer):
-    """Serializers for recipes."""
+    """Base serializer for recipes. Contains all model fields plus self property
+    and avoid id representation and description."""
 
     self = serializers.SerializerMethodField(read_only = True)
 
@@ -161,18 +168,31 @@ class RecipeBaseSerializer(serializers.ModelSerializer):
         return obj.self_url
 
 class RecipeModelSerializer(RecipeBaseSerializer):
+    """
+    Model recipe serializer for C-U-D operations, contains all the
+    model fields except the id
+    """
+
     class Meta(RecipeBaseSerializer.Meta):
         fields = RecipeBaseSerializer.Meta.fields + [
             "description",
         ]
 
     def validate_title(self, value):
+        """
+        As this recipe model serializers is used to CUD operations, is it necessary
+        to validate that doesn't exist a recipe with the same title for the current user
+        """
         user = self.context['request'].user
         if not Recipe.objects.filter(user=user, title=value).exists():
             return value
         raise serializers.ValidationError("Ya tenes registrada una receta con ese nombre")
 
 class RecipeListedSerializer(RecipeBaseSerializer):
+    """
+    Serializer for list operation for the recipe, just add links field to the
+    base recipe serializer
+    """
 
     links = serializers.SerializerMethodField(read_only = True)
 
@@ -191,7 +211,9 @@ class RecipeListedSerializer(RecipeBaseSerializer):
         return links
 
 class RecipeDetailedSerializer(RecipeBaseSerializer):
-    """Serializer for recipe detail view."""
+    """
+    Serializer for recipe detail view. Just add nested tag serializer
+    """
 
     tags = TagRelatedSerializer(
         many = True,

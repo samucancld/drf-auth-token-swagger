@@ -52,16 +52,10 @@ class TagViewSet(viewsets.ModelViewSet):
         match self.action:
             case "list":
                 return serializers.TagListedSerializer
-            case "create":
-                return serializers.TagBaseSerializer
-            case "partial_update":
-                pass
-            case "update":
+            case "create" | "partial_update" | "update" | "destroy":
                 return serializers.TagBaseSerializer
             case "retrieve":
                 return serializers.TagDetailedSerializer
-            case "destroy":
-                return serializers.TagBaseSerializer
 
     def perform_create(self, serializer):
         """Create a new tag"""
