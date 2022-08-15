@@ -5,7 +5,7 @@ Serializers for the API
 from django.contrib.auth import get_user_model, authenticate
 from rest_framework import serializers
 from django.utils.translation import gettext_lazy as _
-from common.models import Recipe
+from common.models import Recipe, Tag
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -22,9 +22,9 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
         fields = (
+            "self",
             "username",
             "password",
-            "self",
             "links",
         )
         extra_kwargs = {
@@ -90,12 +90,62 @@ class TokenSerializer(serializers.Serializer):
         attrs["user"] = user
         return attrs
 
-class RecipeSerializer(serializers.ModelSerializer):
-    """Serializers for recipes."""
+
+class TagBaseSerializer(serializers.ModelSerializer):
+    """Serializer for tags."""
 
     self = serializers.SerializerMethodField(
         read_only = True
     )
+
+    class Meta:
+        model = Tag
+        fields = [
+            "self",
+            "name",
+        ]
+        print(fields)
+
+    def get_self(self, obj):
+        return obj.self_url
+
+    def validate_name(self, value):
+        user = self.context['request'].user
+        if not Tag.objects.filter(user=user, name=value).exists():
+            return value
+        raise serializers.ValidationError("Ya tenes registrado un tag con ese nombre")
+
+
+class TagListedSerializer(TagBaseSerializer):
+    """Serializer for tag related view."""
+
+    links = serializers.SerializerMethodField(
+        read_only = True
+    )
+
+    class Meta(TagBaseSerializer.Meta):
+        fields = TagBaseSerializer.Meta.fields + [
+            "links",
+        ]
+
+    def get_links(self, obj):
+        links = []
+        for recipe in obj.recipes.all():
+            links.append(
+                {
+                    "rel": "recipe",
+                    "href": recipe.self_url,
+                }
+            )
+        return links
+
+TagDetailedSerializer = TagListedSerializer
+TagRelatedSerializer = TagBaseSerializer
+
+class RecipeBaseSerializer(serializers.ModelSerializer):
+    """Serializers for recipes."""
+
+    self = serializers.SerializerMethodField(read_only = True)
 
     class Meta:
         model = Recipe
@@ -110,23 +160,42 @@ class RecipeSerializer(serializers.ModelSerializer):
     def get_self(self, obj):
         return obj.self_url
 
-class RecipeDetailSerializer(RecipeSerializer):
-    """Serializer for recipe detail view."""
-    links = serializers.SerializerMethodField(
-        read_only = True
-    )
-    class Meta(RecipeSerializer.Meta):
-        fields = RecipeSerializer.Meta.fields + [
+class RecipeModelSerializer(RecipeBaseSerializer):
+    class Meta(RecipeBaseSerializer.Meta):
+        fields = RecipeBaseSerializer.Meta.fields + [
             "description",
-            "links",
         ]
+
+class RecipeListedSerializer(RecipeBaseSerializer):
+
+    links = serializers.SerializerMethodField(read_only = True)
+
+    class Meta(RecipeBaseSerializer.Meta):
+        fields = RecipeBaseSerializer.Meta.fields + ["links"]
 
     def get_links(self, obj):
-        links = [
-            {
-                "rel": "user",
-                "href": obj.user.self_url,
-            },
-        ]
+        links = []
+        for tag in obj.tags.all():
+            links.append(
+                {
+                    "rel": "tag",
+                    "href": tag.self_url,
+                }
+            )
         return links
 
+class RecipeDetailedSerializer(RecipeBaseSerializer):
+    """Serializer for recipe detail view."""
+
+    tags = TagRelatedSerializer(
+        many = True,
+    )
+
+    class Meta(RecipeBaseSerializer.Meta):
+        fields = RecipeBaseSerializer.Meta.fields + [
+            "description",
+            "tags",
+        ]
+
+class RecipeRelatedSerializer(RecipeBaseSerializer):
+    pass

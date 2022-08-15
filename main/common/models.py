@@ -89,6 +89,10 @@ class Tag(models.Model):
     def __str__(self) -> str:
         return self.name
 
+    @property
+    def self_url(self) -> str:
+        return f"/api/tags/{self.id}"
+
 class Recipe(models.Model):
     """Recipe model."""
 

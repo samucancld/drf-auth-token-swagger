@@ -17,3 +17,6 @@ urlpatterns = [
     path(f"{USERS}/list", views.ListUserView.as_view(), name="create"),
     path("", include(routers)),
 ]
+
+
+print(urlpatterns)
