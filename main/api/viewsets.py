@@ -33,28 +33,10 @@ class RecipeViewSet(viewsets.ModelViewSet):
             case "retrieve":
                 return serializers.RecipeDetailedSerializer
 
-    def recipe_exists(self, serializer):
-        title = serializer.validated_data['title']
-        queryset = Recipe.objects.filter(
-            title=title,
-            user = self.request.user
-        )
-        if queryset.exists():
-            raise drf_serializers.ValidationError({"detail":"Ya registraste una receta con ese nombre"})
-        return False
-
-
     def perform_create(self, serializer):
         """Create a new recipe"""
 
-        if self.recipe_exists(serializer) is False:
-            serializer.save(user=self.request.user)
-
-    def perform_update(self, serializer):
-        """Update a recipe"""
-        if self.recipe_exists(serializer) is False:
-            serializer.save()
-
+        serializer.save(user=self.request.user)
 
 class TagViewSet(viewsets.ModelViewSet):
     """Manage tags in the database"""

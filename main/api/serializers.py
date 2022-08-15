@@ -166,6 +166,12 @@ class RecipeModelSerializer(RecipeBaseSerializer):
             "description",
         ]
 
+    def validate_title(self, value):
+        user = self.context['request'].user
+        if not Recipe.objects.filter(user=user, title=value).exists():
+            return value
+        raise serializers.ValidationError("Ya tenes registrada una receta con ese nombre")
+
 class RecipeListedSerializer(RecipeBaseSerializer):
 
     links = serializers.SerializerMethodField(read_only = True)
