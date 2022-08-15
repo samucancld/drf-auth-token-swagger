@@ -18,7 +18,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Recipe'
+                  $ref: '#/components/schemas/RecipeListed'
           description: ''
     post:
       operationId: api_recipes_create
@@ -29,13 +29,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RecipeDetail'
+              $ref: '#/components/schemas/RecipeModel'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/RecipeDetail'
+              $ref: '#/components/schemas/RecipeModel'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/RecipeDetail'
+              $ref: '#/components/schemas/RecipeModel'
         required: true
       security:
       - tokenAuth: []
@@ -44,7 +44,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RecipeDetail'
+                $ref: '#/components/schemas/RecipeModel'
           description: ''
   /api/recipes/{id}/:
     get:
@@ -66,7 +66,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RecipeDetail'
+                $ref: '#/components/schemas/RecipeDetailed'
           description: ''
     put:
       operationId: api_recipes_update
@@ -84,13 +84,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RecipeDetail'
+              $ref: '#/components/schemas/RecipeModel'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/RecipeDetail'
+              $ref: '#/components/schemas/RecipeModel'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/RecipeDetail'
+              $ref: '#/components/schemas/RecipeModel'
         required: true
       security:
       - tokenAuth: []
@@ -99,7 +99,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RecipeDetail'
+                $ref: '#/components/schemas/RecipeModel'
           description: ''
     patch:
       operationId: api_recipes_partial_update
@@ -117,13 +117,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PatchedRecipeDetail'
+              $ref: '#/components/schemas/PatchedRecipeModel'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/PatchedRecipeDetail'
+              $ref: '#/components/schemas/PatchedRecipeModel'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/PatchedRecipeDetail'
+              $ref: '#/components/schemas/PatchedRecipeModel'
       security:
       - tokenAuth: []
       responses:
@@ -131,7 +131,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RecipeDetail'
+                $ref: '#/components/schemas/RecipeModel'
           description: ''
     delete:
       operationId: api_recipes_destroy
@@ -294,6 +294,153 @@ paths:
                 type: object
                 additionalProperties: {}
           description: ''
+  /api/tags/:
+    get:
+      operationId: api_tags_list
+      description: Manage tags in the database
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TagListed'
+          description: ''
+    post:
+      operationId: api_tags_create
+      description: Manage tags in the database
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TagBase'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TagBase'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TagBase'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TagBase'
+          description: ''
+  /api/tags/{id}/:
+    get:
+      operationId: api_tags_retrieve
+      description: Manage tags in the database
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this tag.
+        required: true
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TagListed'
+          description: ''
+    put:
+      operationId: api_tags_update
+      description: Manage tags in the database
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this tag.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TagBase'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TagBase'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TagBase'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TagBase'
+          description: ''
+    patch:
+      operationId: api_tags_partial_update
+      description: Manage tags in the database
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this tag.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedTagBase'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedTagBase'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedTagBase'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TagBase'
+          description: ''
+    delete:
+      operationId: api_tags_destroy
+      description: Manage tags in the database
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this tag.
+        required: true
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
   /api/users/list:
     get:
       operationId: api_users_list_list
@@ -436,9 +583,11 @@ paths:
           description: ''
 components:
   schemas:
-    PatchedRecipeDetail:
+    PatchedRecipeModel:
       type: object
-      description: Serializer for recipe detail view.
+      description: |-
+        Model recipe serializer for C-U-D operations, contains all the
+        model fields except the id
       properties:
         self:
           type: string
@@ -457,13 +606,27 @@ components:
         description:
           type: string
           nullable: true
-        links:
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagNestedCUD'
+    PatchedTagBase:
+      type: object
+      description: Serializer for tags used to C-R-U-Detail operations.
+      properties:
+        self:
           type: string
           readOnly: true
+        name:
+          type: string
+          maxLength: 255
     PatchedUser:
       type: object
       description: Serializer for the user model.
       properties:
+        self:
+          type: string
+          readOnly: true
         username:
           type: string
           maxLength: 255
@@ -472,38 +635,12 @@ components:
           writeOnly: true
           maxLength: 128
           minLength: 6
-        self:
-          type: string
-          readOnly: true
         links:
           type: string
           readOnly: true
-    Recipe:
+    RecipeDetailed:
       type: object
-      description: Serializers for recipes.
-      properties:
-        self:
-          type: string
-          readOnly: true
-        title:
-          type: string
-          maxLength: 255
-        time_minutes:
-          type: integer
-          maximum: 2147483647
-          minimum: -2147483648
-        price:
-          type: string
-          format: decimal
-          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
-      required:
-      - price
-      - self
-      - time_minutes
-      - title
-    RecipeDetail:
-      type: object
-      description: Serializer for recipe detail view.
+      description: Serializer for recipe detail view. Just add nested tag serializer
       properties:
         self:
           type: string
@@ -522,6 +659,36 @@ components:
         description:
           type: string
           nullable: true
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagBase'
+      required:
+      - price
+      - self
+      - tags
+      - time_minutes
+      - title
+    RecipeListed:
+      type: object
+      description: |-
+        Serializer for list operation for the recipe, just add links field to the
+        base recipe serializer
+      properties:
+        self:
+          type: string
+          readOnly: true
+        title:
+          type: string
+          maxLength: 255
+        time_minutes:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
         links:
           type: string
           readOnly: true
@@ -531,6 +698,81 @@ components:
       - self
       - time_minutes
       - title
+    RecipeModel:
+      type: object
+      description: |-
+        Model recipe serializer for C-U-D operations, contains all the
+        model fields except the id
+      properties:
+        self:
+          type: string
+          readOnly: true
+        title:
+          type: string
+          maxLength: 255
+        time_minutes:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+        description:
+          type: string
+          nullable: true
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagNestedCUD'
+      required:
+      - price
+      - self
+      - time_minutes
+      - title
+    TagBase:
+      type: object
+      description: Serializer for tags used to C-R-U-Detail operations.
+      properties:
+        self:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+      required:
+      - name
+      - self
+    TagListed:
+      type: object
+      description: Serializer for tag list operation.
+      properties:
+        self:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        links:
+          type: string
+          readOnly: true
+      required:
+      - links
+      - name
+      - self
+    TagNestedCUD:
+      type: object
+      description: Serializer for tags used to nested CUD operations.
+      properties:
+        self:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+      required:
+      - name
+      - self
     Token:
       type: object
       description: Serializer for the user auth token.
@@ -546,6 +788,9 @@ components:
       type: object
       description: Serializer for the user model.
       properties:
+        self:
+          type: string
+          readOnly: true
         username:
           type: string
           maxLength: 255
@@ -554,9 +799,6 @@ components:
           writeOnly: true
           maxLength: 128
           minLength: 6
-        self:
-          type: string
-          readOnly: true
         links:
           type: string
           readOnly: true

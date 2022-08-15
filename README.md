@@ -6,9 +6,6 @@ language_tabs:
   - javascript: JavaScript
   - ruby: Ruby
   - python: Python
-  - php: PHP
-  - java: Java
-  - go: Go
 toc_footers: []
 includes: []
 search: true
@@ -25,10 +22,10 @@ headingLevel: 2
 
 # Authentication
 
-- HTTP Authentication, scheme: basic 
+- HTTP Authentication, scheme: basic
 
 * API Key (cookieAuth)
-    - Parameter Name: **sessionid**, in: cookie. 
+    - Parameter Name: **sessionid**, in: cookie.
 
 * API Key (tokenAuth)
     - Parameter Name: **Authorization**, in: header. Token-based authentication with required prefix "Token"
@@ -196,7 +193,8 @@ View for manage recipe APIs
     "self": "string",
     "title": "string",
     "time_minutes": -2147483648,
-    "price": "string"
+    "price": "string",
+    "links": "string"
   }
 ]
 ```
@@ -213,11 +211,12 @@ Status Code **200**
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|*anonymous*|[[Recipe](#schemarecipe)]|false|none|[Serializers for recipes.]|
+|*anonymous*|[[RecipeListed](#schemarecipelisted)]|false|none|[Serializer for list operation for the recipe, just add links field to the<br>base recipe serializer]|
 |» self|string|true|read-only|none|
 |» title|string|true|none|none|
 |» time_minutes|integer|true|none|none|
 |» price|string(decimal)|true|none|none|
+|» links|string|true|read-only|none|
 
 <aside class="warning">
 To perform this operation, you must be authenticated by means of one of the following methods:
@@ -252,7 +251,12 @@ const inputBody = '{
   "title": "string",
   "time_minutes": -2147483648,
   "price": "string",
-  "description": "string"
+  "description": "string",
+  "tags": [
+    {
+      "name": "string"
+    }
+  ]
 }';
 const headers = {
   'Content-Type':'application/json',
@@ -394,7 +398,12 @@ View for manage recipe APIs
   "title": "string",
   "time_minutes": -2147483648,
   "price": "string",
-  "description": "string"
+  "description": "string",
+  "tags": [
+    {
+      "name": "string"
+    }
+  ]
 }
 ```
 
@@ -403,6 +412,8 @@ title: string
 time_minutes: -2147483648
 price: string
 description: string
+tags:
+  - name: string
 
 ```
 
@@ -410,7 +421,7 @@ description: string
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|body|body|[RecipeDetail](#schemarecipedetail)|true|none|
+|body|body|[RecipeModel](#schemarecipemodel)|true|none|
 
 > Example responses
 
@@ -423,7 +434,12 @@ description: string
   "time_minutes": -2147483648,
   "price": "string",
   "description": "string",
-  "links": "string"
+  "tags": [
+    {
+      "self": "string",
+      "name": "string"
+    }
+  ]
 }
 ```
 
@@ -431,7 +447,7 @@ description: string
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|none|[RecipeDetail](#schemarecipedetail)|
+|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|none|[RecipeModel](#schemarecipemodel)|
 
 <aside class="warning">
 To perform this operation, you must be authenticated by means of one of the following methods:
@@ -606,7 +622,12 @@ View for manage recipe APIs
   "time_minutes": -2147483648,
   "price": "string",
   "description": "string",
-  "links": "string"
+  "tags": [
+    {
+      "self": "string",
+      "name": "string"
+    }
+  ]
 }
 ```
 
@@ -614,7 +635,7 @@ View for manage recipe APIs
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|none|[RecipeDetail](#schemarecipedetail)|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|none|[RecipeDetailed](#schemarecipedetailed)|
 
 <aside class="warning">
 To perform this operation, you must be authenticated by means of one of the following methods:
@@ -649,7 +670,12 @@ const inputBody = '{
   "title": "string",
   "time_minutes": -2147483648,
   "price": "string",
-  "description": "string"
+  "description": "string",
+  "tags": [
+    {
+      "name": "string"
+    }
+  ]
 }';
 const headers = {
   'Content-Type':'application/json',
@@ -791,7 +817,12 @@ View for manage recipe APIs
   "title": "string",
   "time_minutes": -2147483648,
   "price": "string",
-  "description": "string"
+  "description": "string",
+  "tags": [
+    {
+      "name": "string"
+    }
+  ]
 }
 ```
 
@@ -800,6 +831,8 @@ title: string
 time_minutes: -2147483648
 price: string
 description: string
+tags:
+  - name: string
 
 ```
 
@@ -808,7 +841,7 @@ description: string
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
 |id|path|integer|true|A unique integer value identifying this recipe.|
-|body|body|[RecipeDetail](#schemarecipedetail)|true|none|
+|body|body|[RecipeModel](#schemarecipemodel)|true|none|
 
 > Example responses
 
@@ -821,7 +854,12 @@ description: string
   "time_minutes": -2147483648,
   "price": "string",
   "description": "string",
-  "links": "string"
+  "tags": [
+    {
+      "self": "string",
+      "name": "string"
+    }
+  ]
 }
 ```
 
@@ -829,7 +867,7 @@ description: string
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|none|[RecipeDetail](#schemarecipedetail)|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|none|[RecipeModel](#schemarecipemodel)|
 
 <aside class="warning">
 To perform this operation, you must be authenticated by means of one of the following methods:
@@ -864,7 +902,12 @@ const inputBody = '{
   "title": "string",
   "time_minutes": -2147483648,
   "price": "string",
-  "description": "string"
+  "description": "string",
+  "tags": [
+    {
+      "name": "string"
+    }
+  ]
 }';
 const headers = {
   'Content-Type':'application/json',
@@ -1006,7 +1049,12 @@ View for manage recipe APIs
   "title": "string",
   "time_minutes": -2147483648,
   "price": "string",
-  "description": "string"
+  "description": "string",
+  "tags": [
+    {
+      "name": "string"
+    }
+  ]
 }
 ```
 
@@ -1015,6 +1063,8 @@ title: string
 time_minutes: -2147483648
 price: string
 description: string
+tags:
+  - name: string
 
 ```
 
@@ -1023,7 +1073,7 @@ description: string
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
 |id|path|integer|true|A unique integer value identifying this recipe.|
-|body|body|[PatchedRecipeDetail](#schemapatchedrecipedetail)|false|none|
+|body|body|[PatchedRecipeModel](#schemapatchedrecipemodel)|false|none|
 
 > Example responses
 
@@ -1036,7 +1086,12 @@ description: string
   "time_minutes": -2147483648,
   "price": "string",
   "description": "string",
-  "links": "string"
+  "tags": [
+    {
+      "self": "string",
+      "name": "string"
+    }
+  ]
 }
 ```
 
@@ -1044,7 +1099,7 @@ description: string
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|none|[RecipeDetail](#schemarecipedetail)|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|none|[RecipeModel](#schemarecipemodel)|
 
 <aside class="warning">
 To perform this operation, you must be authenticated by means of one of the following methods:
@@ -1500,6 +1555,1138 @@ To perform this operation, you must be authenticated by means of one of the foll
 cookieAuth, basicAuth, None
 </aside>
 
+## api_tags_list
+
+<a id="opIdapi_tags_list"></a>
+
+> Code samples
+
+```shell
+# You can also use wget
+curl -X GET /api/tags/ \
+  -H 'Accept: application/json' \
+  -H 'Authorization: API_KEY'
+
+```
+
+```http
+GET /api/tags/ HTTP/1.1
+
+Accept: application/json
+
+```
+
+```javascript
+
+const headers = {
+  'Accept':'application/json',
+  'Authorization':'API_KEY'
+};
+
+fetch('/api/tags/',
+{
+  method: 'GET',
+
+  headers: headers
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+```ruby
+require 'rest-client'
+require 'json'
+
+headers = {
+  'Accept' => 'application/json',
+  'Authorization' => 'API_KEY'
+}
+
+result = RestClient.get '/api/tags/',
+  params: {
+  }, headers: headers
+
+p JSON.parse(result)
+
+```
+
+```python
+import requests
+headers = {
+  'Accept': 'application/json',
+  'Authorization': 'API_KEY'
+}
+
+r = requests.get('/api/tags/', headers = headers)
+
+print(r.json())
+
+```
+
+```php
+<?php
+
+require 'vendor/autoload.php';
+
+$headers = array(
+    'Accept' => 'application/json',
+    'Authorization' => 'API_KEY',
+);
+
+$client = new \GuzzleHttp\Client();
+
+// Define array of request body.
+$request_body = array();
+
+try {
+    $response = $client->request('GET','/api/tags/', array(
+        'headers' => $headers,
+        'json' => $request_body,
+       )
+    );
+    print_r($response->getBody()->getContents());
+ }
+ catch (\GuzzleHttp\Exception\BadResponseException $e) {
+    // handle exception or api errors.
+    print_r($e->getMessage());
+ }
+
+ // ...
+
+```
+
+```java
+URL obj = new URL("/api/tags/");
+HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+con.setRequestMethod("GET");
+int responseCode = con.getResponseCode();
+BufferedReader in = new BufferedReader(
+    new InputStreamReader(con.getInputStream()));
+String inputLine;
+StringBuffer response = new StringBuffer();
+while ((inputLine = in.readLine()) != null) {
+    response.append(inputLine);
+}
+in.close();
+System.out.println(response.toString());
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    headers := map[string][]string{
+        "Accept": []string{"application/json"},
+        "Authorization": []string{"API_KEY"},
+    }
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("GET", "/api/tags/", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`GET /api/tags/`
+
+Manage tags in the database
+
+> Example responses
+
+> 200 Response
+
+```json
+[
+  {
+    "self": "string",
+    "name": "string",
+    "links": "string"
+  }
+]
+```
+
+<h3 id="api_tags_list-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|none|Inline|
+
+<h3 id="api_tags_list-responseschema">Response Schema</h3>
+
+Status Code **200**
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|[[TagListed](#schemataglisted)]|false|none|[Serializer for tag list operation.]|
+|» self|string|true|read-only|none|
+|» name|string|true|none|none|
+|» links|string|true|read-only|none|
+
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+tokenAuth
+</aside>
+
+## api_tags_create
+
+<a id="opIdapi_tags_create"></a>
+
+> Code samples
+
+```shell
+# You can also use wget
+curl -X POST /api/tags/ \
+  -H 'Content-Type: application/json' \
+  -H 'Accept: application/json' \
+  -H 'Authorization: API_KEY'
+
+```
+
+```http
+POST /api/tags/ HTTP/1.1
+
+Content-Type: application/json
+Accept: application/json
+
+```
+
+```javascript
+const inputBody = '{
+  "name": "string"
+}';
+const headers = {
+  'Content-Type':'application/json',
+  'Accept':'application/json',
+  'Authorization':'API_KEY'
+};
+
+fetch('/api/tags/',
+{
+  method: 'POST',
+  body: inputBody,
+  headers: headers
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+```ruby
+require 'rest-client'
+require 'json'
+
+headers = {
+  'Content-Type' => 'application/json',
+  'Accept' => 'application/json',
+  'Authorization' => 'API_KEY'
+}
+
+result = RestClient.post '/api/tags/',
+  params: {
+  }, headers: headers
+
+p JSON.parse(result)
+
+```
+
+```python
+import requests
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json',
+  'Authorization': 'API_KEY'
+}
+
+r = requests.post('/api/tags/', headers = headers)
+
+print(r.json())
+
+```
+
+```php
+<?php
+
+require 'vendor/autoload.php';
+
+$headers = array(
+    'Content-Type' => 'application/json',
+    'Accept' => 'application/json',
+    'Authorization' => 'API_KEY',
+);
+
+$client = new \GuzzleHttp\Client();
+
+// Define array of request body.
+$request_body = array();
+
+try {
+    $response = $client->request('POST','/api/tags/', array(
+        'headers' => $headers,
+        'json' => $request_body,
+       )
+    );
+    print_r($response->getBody()->getContents());
+ }
+ catch (\GuzzleHttp\Exception\BadResponseException $e) {
+    // handle exception or api errors.
+    print_r($e->getMessage());
+ }
+
+ // ...
+
+```
+
+```java
+URL obj = new URL("/api/tags/");
+HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+con.setRequestMethod("POST");
+int responseCode = con.getResponseCode();
+BufferedReader in = new BufferedReader(
+    new InputStreamReader(con.getInputStream()));
+String inputLine;
+StringBuffer response = new StringBuffer();
+while ((inputLine = in.readLine()) != null) {
+    response.append(inputLine);
+}
+in.close();
+System.out.println(response.toString());
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    headers := map[string][]string{
+        "Content-Type": []string{"application/json"},
+        "Accept": []string{"application/json"},
+        "Authorization": []string{"API_KEY"},
+    }
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("POST", "/api/tags/", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`POST /api/tags/`
+
+Manage tags in the database
+
+> Body parameter
+
+```json
+{
+  "name": "string"
+}
+```
+
+```yaml
+name: string
+
+```
+
+<h3 id="api_tags_create-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|body|body|[TagBase](#schematagbase)|true|none|
+
+> Example responses
+
+> 201 Response
+
+```json
+{
+  "self": "string",
+  "name": "string"
+}
+```
+
+<h3 id="api_tags_create-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|none|[TagBase](#schematagbase)|
+
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+tokenAuth
+</aside>
+
+## api_tags_retrieve
+
+<a id="opIdapi_tags_retrieve"></a>
+
+> Code samples
+
+```shell
+# You can also use wget
+curl -X GET /api/tags/{id}/ \
+  -H 'Accept: application/json' \
+  -H 'Authorization: API_KEY'
+
+```
+
+```http
+GET /api/tags/{id}/ HTTP/1.1
+
+Accept: application/json
+
+```
+
+```javascript
+
+const headers = {
+  'Accept':'application/json',
+  'Authorization':'API_KEY'
+};
+
+fetch('/api/tags/{id}/',
+{
+  method: 'GET',
+
+  headers: headers
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+```ruby
+require 'rest-client'
+require 'json'
+
+headers = {
+  'Accept' => 'application/json',
+  'Authorization' => 'API_KEY'
+}
+
+result = RestClient.get '/api/tags/{id}/',
+  params: {
+  }, headers: headers
+
+p JSON.parse(result)
+
+```
+
+```python
+import requests
+headers = {
+  'Accept': 'application/json',
+  'Authorization': 'API_KEY'
+}
+
+r = requests.get('/api/tags/{id}/', headers = headers)
+
+print(r.json())
+
+```
+
+```php
+<?php
+
+require 'vendor/autoload.php';
+
+$headers = array(
+    'Accept' => 'application/json',
+    'Authorization' => 'API_KEY',
+);
+
+$client = new \GuzzleHttp\Client();
+
+// Define array of request body.
+$request_body = array();
+
+try {
+    $response = $client->request('GET','/api/tags/{id}/', array(
+        'headers' => $headers,
+        'json' => $request_body,
+       )
+    );
+    print_r($response->getBody()->getContents());
+ }
+ catch (\GuzzleHttp\Exception\BadResponseException $e) {
+    // handle exception or api errors.
+    print_r($e->getMessage());
+ }
+
+ // ...
+
+```
+
+```java
+URL obj = new URL("/api/tags/{id}/");
+HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+con.setRequestMethod("GET");
+int responseCode = con.getResponseCode();
+BufferedReader in = new BufferedReader(
+    new InputStreamReader(con.getInputStream()));
+String inputLine;
+StringBuffer response = new StringBuffer();
+while ((inputLine = in.readLine()) != null) {
+    response.append(inputLine);
+}
+in.close();
+System.out.println(response.toString());
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    headers := map[string][]string{
+        "Accept": []string{"application/json"},
+        "Authorization": []string{"API_KEY"},
+    }
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("GET", "/api/tags/{id}/", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`GET /api/tags/{id}/`
+
+Manage tags in the database
+
+<h3 id="api_tags_retrieve-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|id|path|integer|true|A unique integer value identifying this tag.|
+
+> Example responses
+
+> 200 Response
+
+```json
+{
+  "self": "string",
+  "name": "string",
+  "links": "string"
+}
+```
+
+<h3 id="api_tags_retrieve-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|none|[TagListed](#schemataglisted)|
+
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+tokenAuth
+</aside>
+
+## api_tags_update
+
+<a id="opIdapi_tags_update"></a>
+
+> Code samples
+
+```shell
+# You can also use wget
+curl -X PUT /api/tags/{id}/ \
+  -H 'Content-Type: application/json' \
+  -H 'Accept: application/json' \
+  -H 'Authorization: API_KEY'
+
+```
+
+```http
+PUT /api/tags/{id}/ HTTP/1.1
+
+Content-Type: application/json
+Accept: application/json
+
+```
+
+```javascript
+const inputBody = '{
+  "name": "string"
+}';
+const headers = {
+  'Content-Type':'application/json',
+  'Accept':'application/json',
+  'Authorization':'API_KEY'
+};
+
+fetch('/api/tags/{id}/',
+{
+  method: 'PUT',
+  body: inputBody,
+  headers: headers
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+```ruby
+require 'rest-client'
+require 'json'
+
+headers = {
+  'Content-Type' => 'application/json',
+  'Accept' => 'application/json',
+  'Authorization' => 'API_KEY'
+}
+
+result = RestClient.put '/api/tags/{id}/',
+  params: {
+  }, headers: headers
+
+p JSON.parse(result)
+
+```
+
+```python
+import requests
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json',
+  'Authorization': 'API_KEY'
+}
+
+r = requests.put('/api/tags/{id}/', headers = headers)
+
+print(r.json())
+
+```
+
+```php
+<?php
+
+require 'vendor/autoload.php';
+
+$headers = array(
+    'Content-Type' => 'application/json',
+    'Accept' => 'application/json',
+    'Authorization' => 'API_KEY',
+);
+
+$client = new \GuzzleHttp\Client();
+
+// Define array of request body.
+$request_body = array();
+
+try {
+    $response = $client->request('PUT','/api/tags/{id}/', array(
+        'headers' => $headers,
+        'json' => $request_body,
+       )
+    );
+    print_r($response->getBody()->getContents());
+ }
+ catch (\GuzzleHttp\Exception\BadResponseException $e) {
+    // handle exception or api errors.
+    print_r($e->getMessage());
+ }
+
+ // ...
+
+```
+
+```java
+URL obj = new URL("/api/tags/{id}/");
+HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+con.setRequestMethod("PUT");
+int responseCode = con.getResponseCode();
+BufferedReader in = new BufferedReader(
+    new InputStreamReader(con.getInputStream()));
+String inputLine;
+StringBuffer response = new StringBuffer();
+while ((inputLine = in.readLine()) != null) {
+    response.append(inputLine);
+}
+in.close();
+System.out.println(response.toString());
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    headers := map[string][]string{
+        "Content-Type": []string{"application/json"},
+        "Accept": []string{"application/json"},
+        "Authorization": []string{"API_KEY"},
+    }
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("PUT", "/api/tags/{id}/", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`PUT /api/tags/{id}/`
+
+Manage tags in the database
+
+> Body parameter
+
+```json
+{
+  "name": "string"
+}
+```
+
+```yaml
+name: string
+
+```
+
+<h3 id="api_tags_update-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|id|path|integer|true|A unique integer value identifying this tag.|
+|body|body|[TagBase](#schematagbase)|true|none|
+
+> Example responses
+
+> 200 Response
+
+```json
+{
+  "self": "string",
+  "name": "string"
+}
+```
+
+<h3 id="api_tags_update-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|none|[TagBase](#schematagbase)|
+
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+tokenAuth
+</aside>
+
+## api_tags_partial_update
+
+<a id="opIdapi_tags_partial_update"></a>
+
+> Code samples
+
+```shell
+# You can also use wget
+curl -X PATCH /api/tags/{id}/ \
+  -H 'Content-Type: application/json' \
+  -H 'Accept: application/json' \
+  -H 'Authorization: API_KEY'
+
+```
+
+```http
+PATCH /api/tags/{id}/ HTTP/1.1
+
+Content-Type: application/json
+Accept: application/json
+
+```
+
+```javascript
+const inputBody = '{
+  "name": "string"
+}';
+const headers = {
+  'Content-Type':'application/json',
+  'Accept':'application/json',
+  'Authorization':'API_KEY'
+};
+
+fetch('/api/tags/{id}/',
+{
+  method: 'PATCH',
+  body: inputBody,
+  headers: headers
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+```ruby
+require 'rest-client'
+require 'json'
+
+headers = {
+  'Content-Type' => 'application/json',
+  'Accept' => 'application/json',
+  'Authorization' => 'API_KEY'
+}
+
+result = RestClient.patch '/api/tags/{id}/',
+  params: {
+  }, headers: headers
+
+p JSON.parse(result)
+
+```
+
+```python
+import requests
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json',
+  'Authorization': 'API_KEY'
+}
+
+r = requests.patch('/api/tags/{id}/', headers = headers)
+
+print(r.json())
+
+```
+
+```php
+<?php
+
+require 'vendor/autoload.php';
+
+$headers = array(
+    'Content-Type' => 'application/json',
+    'Accept' => 'application/json',
+    'Authorization' => 'API_KEY',
+);
+
+$client = new \GuzzleHttp\Client();
+
+// Define array of request body.
+$request_body = array();
+
+try {
+    $response = $client->request('PATCH','/api/tags/{id}/', array(
+        'headers' => $headers,
+        'json' => $request_body,
+       )
+    );
+    print_r($response->getBody()->getContents());
+ }
+ catch (\GuzzleHttp\Exception\BadResponseException $e) {
+    // handle exception or api errors.
+    print_r($e->getMessage());
+ }
+
+ // ...
+
+```
+
+```java
+URL obj = new URL("/api/tags/{id}/");
+HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+con.setRequestMethod("PATCH");
+int responseCode = con.getResponseCode();
+BufferedReader in = new BufferedReader(
+    new InputStreamReader(con.getInputStream()));
+String inputLine;
+StringBuffer response = new StringBuffer();
+while ((inputLine = in.readLine()) != null) {
+    response.append(inputLine);
+}
+in.close();
+System.out.println(response.toString());
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    headers := map[string][]string{
+        "Content-Type": []string{"application/json"},
+        "Accept": []string{"application/json"},
+        "Authorization": []string{"API_KEY"},
+    }
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("PATCH", "/api/tags/{id}/", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`PATCH /api/tags/{id}/`
+
+Manage tags in the database
+
+> Body parameter
+
+```json
+{
+  "name": "string"
+}
+```
+
+```yaml
+name: string
+
+```
+
+<h3 id="api_tags_partial_update-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|id|path|integer|true|A unique integer value identifying this tag.|
+|body|body|[PatchedTagBase](#schemapatchedtagbase)|false|none|
+
+> Example responses
+
+> 200 Response
+
+```json
+{
+  "self": "string",
+  "name": "string"
+}
+```
+
+<h3 id="api_tags_partial_update-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|none|[TagBase](#schematagbase)|
+
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+tokenAuth
+</aside>
+
+## api_tags_destroy
+
+<a id="opIdapi_tags_destroy"></a>
+
+> Code samples
+
+```shell
+# You can also use wget
+curl -X DELETE /api/tags/{id}/ \
+  -H 'Authorization: API_KEY'
+
+```
+
+```http
+DELETE /api/tags/{id}/ HTTP/1.1
+
+```
+
+```javascript
+
+const headers = {
+  'Authorization':'API_KEY'
+};
+
+fetch('/api/tags/{id}/',
+{
+  method: 'DELETE',
+
+  headers: headers
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+```ruby
+require 'rest-client'
+require 'json'
+
+headers = {
+  'Authorization' => 'API_KEY'
+}
+
+result = RestClient.delete '/api/tags/{id}/',
+  params: {
+  }, headers: headers
+
+p JSON.parse(result)
+
+```
+
+```python
+import requests
+headers = {
+  'Authorization': 'API_KEY'
+}
+
+r = requests.delete('/api/tags/{id}/', headers = headers)
+
+print(r.json())
+
+```
+
+```php
+<?php
+
+require 'vendor/autoload.php';
+
+$headers = array(
+    'Authorization' => 'API_KEY',
+);
+
+$client = new \GuzzleHttp\Client();
+
+// Define array of request body.
+$request_body = array();
+
+try {
+    $response = $client->request('DELETE','/api/tags/{id}/', array(
+        'headers' => $headers,
+        'json' => $request_body,
+       )
+    );
+    print_r($response->getBody()->getContents());
+ }
+ catch (\GuzzleHttp\Exception\BadResponseException $e) {
+    // handle exception or api errors.
+    print_r($e->getMessage());
+ }
+
+ // ...
+
+```
+
+```java
+URL obj = new URL("/api/tags/{id}/");
+HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+con.setRequestMethod("DELETE");
+int responseCode = con.getResponseCode();
+BufferedReader in = new BufferedReader(
+    new InputStreamReader(con.getInputStream()));
+String inputLine;
+StringBuffer response = new StringBuffer();
+while ((inputLine = in.readLine()) != null) {
+    response.append(inputLine);
+}
+in.close();
+System.out.println(response.toString());
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    headers := map[string][]string{
+        "Authorization": []string{"API_KEY"},
+    }
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("DELETE", "/api/tags/{id}/", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`DELETE /api/tags/{id}/`
+
+Manage tags in the database
+
+<h3 id="api_tags_destroy-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|id|path|integer|true|A unique integer value identifying this tag.|
+
+<h3 id="api_tags_destroy-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|No response body|None|
+
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+tokenAuth
+</aside>
+
 ## api_users_list_list
 
 <a id="opIdapi_users_list_list"></a>
@@ -1658,8 +2845,8 @@ Retrieve the list of users with GET (just for admins)
 ```json
 [
   {
-    "username": "string",
     "self": "string",
+    "username": "string",
     "links": "string"
   }
 ]
@@ -1678,9 +2865,9 @@ Status Code **200**
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |*anonymous*|[[User](#schemauser)]|false|none|[Serializer for the user model.]|
+|» self|string|true|read-only|none|
 |» username|string|true|none|none|
 |» password|string|true|write-only|none|
-|» self|string|true|read-only|none|
 |» links|string|true|read-only|none|
 
 <aside class="warning">
@@ -1845,8 +3032,8 @@ Retrieve user data with GET and update user data with PUT/PATCH.
 
 ```json
 {
-  "username": "string",
   "self": "string",
+  "username": "string",
   "links": "string"
 }
 ```
@@ -2050,8 +3237,8 @@ password: string
 
 ```json
 {
-  "username": "string",
   "self": "string",
+  "username": "string",
   "links": "string"
 }
 ```
@@ -2255,8 +3442,8 @@ password: string
 
 ```json
 {
-  "username": "string",
   "self": "string",
+  "username": "string",
   "links": "string"
 }
 ```
@@ -2454,8 +3641,8 @@ password: string
 
 ```json
 {
-  "username": "string",
   "self": "string",
+  "username": "string",
   "links": "string"
 }
 ```
@@ -2671,12 +3858,12 @@ cookieAuth, basicAuth
 
 # Schemas
 
-<h2 id="tocS_PatchedRecipeDetail">PatchedRecipeDetail</h2>
+<h2 id="tocS_PatchedRecipeModel">PatchedRecipeModel</h2>
 <!-- backwards compatibility -->
-<a id="schemapatchedrecipedetail"></a>
-<a id="schema_PatchedRecipeDetail"></a>
-<a id="tocSpatchedrecipedetail"></a>
-<a id="tocspatchedrecipedetail"></a>
+<a id="schemapatchedrecipemodel"></a>
+<a id="schema_PatchedRecipeModel"></a>
+<a id="tocSpatchedrecipemodel"></a>
+<a id="tocspatchedrecipemodel"></a>
 
 ```json
 {
@@ -2685,12 +3872,18 @@ cookieAuth, basicAuth
   "time_minutes": -2147483648,
   "price": "string",
   "description": "string",
-  "links": "string"
+  "tags": [
+    {
+      "self": "string",
+      "name": "string"
+    }
+  ]
 }
 
 ```
 
-Serializer for recipe detail view.
+Model recipe serializer for C-U-D operations, contains all the
+model fields except the id
 
 ### Properties
 
@@ -2701,7 +3894,31 @@ Serializer for recipe detail view.
 |time_minutes|integer|false|none|none|
 |price|string(decimal)|false|none|none|
 |description|string¦null|false|none|none|
-|links|string|false|read-only|none|
+|tags|[[TagNestedCUD](#schematagnestedcud)]|false|none|[Serializer for tags used to nested CUD operations.]|
+
+<h2 id="tocS_PatchedTagBase">PatchedTagBase</h2>
+<!-- backwards compatibility -->
+<a id="schemapatchedtagbase"></a>
+<a id="schema_PatchedTagBase"></a>
+<a id="tocSpatchedtagbase"></a>
+<a id="tocspatchedtagbase"></a>
+
+```json
+{
+  "self": "string",
+  "name": "string"
+}
+
+```
+
+Serializer for tags used to C-R-U-Detail operations.
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|self|string|false|read-only|none|
+|name|string|false|none|none|
 
 <h2 id="tocS_PatchedUser">PatchedUser</h2>
 <!-- backwards compatibility -->
@@ -2712,9 +3929,9 @@ Serializer for recipe detail view.
 
 ```json
 {
+  "self": "string",
   "username": "string",
   "password": "string",
-  "self": "string",
   "links": "string"
 }
 
@@ -2726,45 +3943,17 @@ Serializer for the user model.
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
+|self|string|false|read-only|none|
 |username|string|false|none|none|
 |password|string|false|write-only|none|
-|self|string|false|read-only|none|
 |links|string|false|read-only|none|
 
-<h2 id="tocS_Recipe">Recipe</h2>
+<h2 id="tocS_RecipeDetailed">RecipeDetailed</h2>
 <!-- backwards compatibility -->
-<a id="schemarecipe"></a>
-<a id="schema_Recipe"></a>
-<a id="tocSrecipe"></a>
-<a id="tocsrecipe"></a>
-
-```json
-{
-  "self": "string",
-  "title": "string",
-  "time_minutes": -2147483648,
-  "price": "string"
-}
-
-```
-
-Serializers for recipes.
-
-### Properties
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|self|string|true|read-only|none|
-|title|string|true|none|none|
-|time_minutes|integer|true|none|none|
-|price|string(decimal)|true|none|none|
-
-<h2 id="tocS_RecipeDetail">RecipeDetail</h2>
-<!-- backwards compatibility -->
-<a id="schemarecipedetail"></a>
-<a id="schema_RecipeDetail"></a>
-<a id="tocSrecipedetail"></a>
-<a id="tocsrecipedetail"></a>
+<a id="schemarecipedetailed"></a>
+<a id="schema_RecipeDetailed"></a>
+<a id="tocSrecipedetailed"></a>
+<a id="tocsrecipedetailed"></a>
 
 ```json
 {
@@ -2773,12 +3962,17 @@ Serializers for recipes.
   "time_minutes": -2147483648,
   "price": "string",
   "description": "string",
-  "links": "string"
+  "tags": [
+    {
+      "self": "string",
+      "name": "string"
+    }
+  ]
 }
 
 ```
 
-Serializer for recipe detail view.
+Serializer for recipe detail view. Just add nested tag serializer
 
 ### Properties
 
@@ -2789,7 +3983,150 @@ Serializer for recipe detail view.
 |time_minutes|integer|true|none|none|
 |price|string(decimal)|true|none|none|
 |description|string¦null|false|none|none|
+|tags|[[TagBase](#schematagbase)]|true|none|[Serializer for tags used to C-R-U-Detail operations.]|
+
+<h2 id="tocS_RecipeListed">RecipeListed</h2>
+<!-- backwards compatibility -->
+<a id="schemarecipelisted"></a>
+<a id="schema_RecipeListed"></a>
+<a id="tocSrecipelisted"></a>
+<a id="tocsrecipelisted"></a>
+
+```json
+{
+  "self": "string",
+  "title": "string",
+  "time_minutes": -2147483648,
+  "price": "string",
+  "links": "string"
+}
+
+```
+
+Serializer for list operation for the recipe, just add links field to the
+base recipe serializer
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|self|string|true|read-only|none|
+|title|string|true|none|none|
+|time_minutes|integer|true|none|none|
+|price|string(decimal)|true|none|none|
 |links|string|true|read-only|none|
+
+<h2 id="tocS_RecipeModel">RecipeModel</h2>
+<!-- backwards compatibility -->
+<a id="schemarecipemodel"></a>
+<a id="schema_RecipeModel"></a>
+<a id="tocSrecipemodel"></a>
+<a id="tocsrecipemodel"></a>
+
+```json
+{
+  "self": "string",
+  "title": "string",
+  "time_minutes": -2147483648,
+  "price": "string",
+  "description": "string",
+  "tags": [
+    {
+      "self": "string",
+      "name": "string"
+    }
+  ]
+}
+
+```
+
+Model recipe serializer for C-U-D operations, contains all the
+model fields except the id
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|self|string|true|read-only|none|
+|title|string|true|none|none|
+|time_minutes|integer|true|none|none|
+|price|string(decimal)|true|none|none|
+|description|string¦null|false|none|none|
+|tags|[[TagNestedCUD](#schematagnestedcud)]|false|none|[Serializer for tags used to nested CUD operations.]|
+
+<h2 id="tocS_TagBase">TagBase</h2>
+<!-- backwards compatibility -->
+<a id="schematagbase"></a>
+<a id="schema_TagBase"></a>
+<a id="tocStagbase"></a>
+<a id="tocstagbase"></a>
+
+```json
+{
+  "self": "string",
+  "name": "string"
+}
+
+```
+
+Serializer for tags used to C-R-U-Detail operations.
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|self|string|true|read-only|none|
+|name|string|true|none|none|
+
+<h2 id="tocS_TagListed">TagListed</h2>
+<!-- backwards compatibility -->
+<a id="schemataglisted"></a>
+<a id="schema_TagListed"></a>
+<a id="tocStaglisted"></a>
+<a id="tocstaglisted"></a>
+
+```json
+{
+  "self": "string",
+  "name": "string",
+  "links": "string"
+}
+
+```
+
+Serializer for tag list operation.
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|self|string|true|read-only|none|
+|name|string|true|none|none|
+|links|string|true|read-only|none|
+
+<h2 id="tocS_TagNestedCUD">TagNestedCUD</h2>
+<!-- backwards compatibility -->
+<a id="schematagnestedcud"></a>
+<a id="schema_TagNestedCUD"></a>
+<a id="tocStagnestedcud"></a>
+<a id="tocstagnestedcud"></a>
+
+```json
+{
+  "self": "string",
+  "name": "string"
+}
+
+```
+
+Serializer for tags used to nested CUD operations.
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|self|string|true|read-only|none|
+|name|string|true|none|none|
 
 <h2 id="tocS_Token">Token</h2>
 <!-- backwards compatibility -->
@@ -2824,9 +4161,9 @@ Serializer for the user auth token.
 
 ```json
 {
+  "self": "string",
   "username": "string",
   "password": "string",
-  "self": "string",
   "links": "string"
 }
 
@@ -2838,8 +4175,8 @@ Serializer for the user model.
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
+|self|string|true|read-only|none|
 |username|string|true|none|none|
 |password|string|true|write-only|none|
-|self|string|true|read-only|none|
 |links|string|true|read-only|none|
 

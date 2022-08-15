@@ -42,6 +42,12 @@ class UserSerializer(serializers.ModelSerializer):
                 "href": recipe.self_url,
             }
             links.append(link)
+        for tag in obj.tags.all():
+            link = {
+                "rel": "tag",
+                "href": tag.self_url,
+            }
+            links.append(link)
         return links
 
     def get_self(self, obj):
