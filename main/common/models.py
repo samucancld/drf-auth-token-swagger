@@ -3,22 +3,20 @@ Databse models.
 """
 
 from django.conf import settings
-from django.db import models #used for fields
-from django.contrib.auth.models import (
-    AbstractBaseUser,
-    BaseUserManager,
-    PermissionsMixin,
-)
+from django.contrib.auth.models import (AbstractBaseUser, BaseUserManager,
+                                        PermissionsMixin)
+from django.db import models  # used for fields
 
 
 class UserManager(BaseUserManager):
     """Manager for users"""
+
     def create_user(self, username, password=None):
         """
         Creates and saves a User with the given username, and password.
         """
         if not username:
-            raise ValueError('Users must have a username')
+            raise ValueError("Users must have a username")
 
         user = self.model(username=username)
 
@@ -44,8 +42,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     Mixins: PermissionsMixin"""
 
     username = models.CharField(
-        max_length = 255,
-        unique = True,
+        max_length=255,
+        unique=True,
     )
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
@@ -77,6 +75,24 @@ class User(AbstractBaseUser, PermissionsMixin):
         # Simplest possible answer: Yes, always
         return True
 
+
+class Ingredient(models.Model):
+    """Ingredient model for recipes"""
+
+    name = models.CharField(max_length=255)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+    )
+
+    def __str__(self) -> str:
+        return self.name
+
+    @property
+    def self_url(self) -> str:
+        return f"/api/ingredients/{self.id}"
+
+
 class Tag(models.Model):
     """Tag for filtering recipes"""
 
@@ -94,13 +110,14 @@ class Tag(models.Model):
     def self_url(self) -> str:
         return f"/api/tags/{self.id}"
 
+
 class Recipe(models.Model):
     """Recipe model."""
 
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        on_delete = models.CASCADE,
-        related_name = "recipes",
+        on_delete=models.CASCADE,
+        related_name="recipes",
     )
 
     title = models.CharField(max_length=255)
@@ -113,6 +130,11 @@ class Recipe(models.Model):
 
     tags = models.ManyToManyField(
         Tag,
+        related_name="recipes",
+    )
+
+    ingredients = models.ManyToManyField(
+        Ingredient,
         related_name="recipes",
     )
 

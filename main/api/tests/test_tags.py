@@ -3,14 +3,13 @@ Tests for the API
 """
 
 from django.contrib.auth import get_user_model
-from django.urls import reverse
 from django.test import TestCase
-
+from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient
 
+from api.serializers import tag_serializers
 from common.models import Tag
-from api.serializers import TagBaseSerializer, TagDetailedSerializer, TagListedSerializer
 
 TAGS_URL = reverse("api:tags-list")
 
@@ -57,7 +56,7 @@ class PrivateTagsApiTest(TestCase):
         res = self.client.get(TAGS_URL)
 
         tags = Tag.objects.all().order_by("-name")
-        serializer = TagListedSerializer(tags, many=True)
+        serializer = tag_serializers.TagListedSerializer(tags, many=True)
 
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         print(res.data, serializer.data)

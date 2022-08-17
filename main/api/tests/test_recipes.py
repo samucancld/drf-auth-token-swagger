@@ -7,20 +7,11 @@ from decimal import Decimal
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
-
 from rest_framework import status
 from rest_framework.test import APIClient
 
+from api.serializers import recipe_serializers
 from common.models import Recipe, Tag
-
-from api.serializers import (
-    RecipeBaseSerializer,
-    RecipeModelSerializer,
-    RecipeDetailedSerializer,
-    RecipeListedSerializer,
-    RecipeRelatedSerializer,
-)
-
 
 RECIPES_URL = reverse("api:recipes-list")
 
@@ -90,7 +81,7 @@ class PrivateRecipeAPITest(TestCase):
         res = self.client.get(RECIPES_URL)
 
         recipes = Recipe.objects.all().order_by("-id")
-        serializer = RecipeListedSerializer(recipes, many=True)
+        serializer = recipe_serializers.RecipeListedSerializer(recipes, many=True)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data, serializer.data)
 
@@ -108,7 +99,7 @@ class PrivateRecipeAPITest(TestCase):
         res = self.client.get(RECIPES_URL)
 
         recipes = Recipe.objects.filter(user=self.user)
-        serializer = RecipeListedSerializer(recipes, many=True)
+        serializer = recipe_serializers.RecipeListedSerializer(recipes, many=True)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data, serializer.data)
 
@@ -119,7 +110,7 @@ class PrivateRecipeAPITest(TestCase):
         url = detail_url(recipe.id)
         res = self.client.get(url)
 
-        serializer = RecipeDetailedSerializer(recipe)
+        serializer = recipe_serializers.RecipeDetailedSerializer(recipe)
         self.assertEqual(res.data, serializer.data)
 
     def test_create_recipe(self):
@@ -183,9 +174,7 @@ class PrivateRecipeAPITest(TestCase):
 
     def test_update_user_returns_error(self):
         """Test changing the recipe user results in an error"""
-        new_user = create_user(
-            username="testuser2", password="testpass123"
-        )
+        new_user = create_user(username="testuser2", password="testpass123")
         recipe = create_recipe(user=self.user)
         payload = {"user": new_user.id}
         url = detail_url(recipe.id)
