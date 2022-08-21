@@ -46,10 +46,5 @@ coverage.xml
 # VirtualEnv
 .venv/
 
-# Developers
-*.sw*
-manage.py
-.DS_Store
-
 # example database
 drf_example
