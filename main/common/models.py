@@ -2,11 +2,12 @@
 Databse models.
 """
 
+import os
+
 from django.conf import settings
 from django.contrib.auth.models import (AbstractBaseUser, BaseUserManager,
                                         PermissionsMixin)
 from django.db import models  # used for fields
-
 
 class UserManager(BaseUserManager):
     """Manager for users"""
@@ -127,6 +128,13 @@ class Recipe(models.Model):
         max_digits=5,
         decimal_places=2,
     )
+
+    image = models.ImageField(
+        null=True,
+        verbose_name="image",
+        upload_to='recipes-images/'
+    )
+
 
     tags = models.ManyToManyField(
         Tag,

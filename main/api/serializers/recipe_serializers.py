@@ -50,6 +50,7 @@ class RecipeModelSerializer(RecipeBaseSerializer):
     class Meta(RecipeBaseSerializer.Meta):
         fields = RecipeBaseSerializer.Meta.fields + [
             "description",
+            "image",
             "tags",
             "ingredients",
         ]
